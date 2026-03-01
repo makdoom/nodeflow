@@ -3,4 +3,9 @@ ignoredBuiltDependencies:
   - unrs-resolver
 
 onlyBuiltDependencies:
+  - '@prisma/engines'
+  - esbuild
+  - inngest-cli
   - msw
+  - prisma
+  - protobufjs
