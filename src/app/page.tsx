@@ -17,10 +17,15 @@ const Page = () => {
     }),
   );
 
+  const createAi = useMutation(trpc.testAi.mutationOptions());
+
   return (
     <div className="">
       Hello world
       {JSON.stringify(data, null, 2)}
+      <Button disabled={createAi.isPending} onClick={() => createAi.mutate()}>
+        Test ai
+      </Button>
       <Button disabled={create.isPending} onClick={() => create.mutate()}>
         Create
       </Button>
