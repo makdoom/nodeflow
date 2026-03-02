@@ -16,6 +16,8 @@
     "@ai-sdk/google": "^3.0.34",
     "@ai-sdk/openai": "^3.0.37",
     "@hookform/resolvers": "^5.2.2",
+    "@polar-sh/better-auth": "^1.8.1",
+    "@polar-sh/sdk": "^0.46.0",
     "@prisma/adapter-pg": "^7.4.2",
     "@prisma/client": "^7.4.2",
     "@tanstack/react-query": "^5.90.21",

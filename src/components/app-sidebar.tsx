@@ -20,6 +20,7 @@ import { LuLogOut } from "react-icons/lu";
 import { LuKeyRound } from "react-icons/lu";
 import { usePathname, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import { useHasActiveSubscription } from "@/features/subscriptions/hooks/use-subscription";
 
 const menuItems = [
   {
@@ -46,6 +47,7 @@ const menuItems = [
 const AppSidebar = () => {
   const router = useRouter();
   const pathName = usePathname();
+  const { hasActiveSubscription, isLoading } = useHasActiveSubscription();
 
   return (
     <Sidebar collapsible="icon">
@@ -95,22 +97,24 @@ const AppSidebar = () => {
 
       <SidebarFooter>
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              tooltip="Upgrade to Pro"
-              className="gap-x4 h-10 px-4"
-              onClick={() => {}}
-            >
-              <IoFlashOutline className="size-4.5!" />
-              <span>Upgrade to Pro</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          {!hasActiveSubscription && !isLoading && (
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                tooltip="Upgrade to Pro"
+                className="gap-x4 h-10 px-4"
+                onClick={() => authClient.checkout({ slug: "Nodeflow-Pro" })}
+              >
+                <IoFlashOutline className="size-4.5!" />
+                <span>Upgrade to Pro</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
 
           <SidebarMenuItem>
             <SidebarMenuButton
               tooltip="Billing Portal"
               className="gap-x4 h-10 px-4"
-              onClick={() => {}}
+              onClick={() => authClient.customer.portal()}
             >
               <BsCreditCard className="size-4.5!" />
               <span>Billing Portal</span>
