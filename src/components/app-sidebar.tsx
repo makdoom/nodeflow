@@ -44,6 +44,7 @@ const menuItems = [
     ],
   },
 ];
+
 const AppSidebar = () => {
   const router = useRouter();
   const pathName = usePathname();
@@ -53,8 +54,12 @@ const AppSidebar = () => {
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <SidebarMenuItem>
-          <SidebarMenuButton asChild className="gap-x4 h-10 px-4 ">
-            <Link href="/" prefetch className="font-bold text-xl text-primary ">
+          <SidebarMenuButton asChild className="gap-x4 h-10 px-4">
+            <Link
+              href="/"
+              prefetch
+              className="font-bold text-xl text-sidebar-primary hover:text-sidebar-primary"
+            >
               <span className="group-data-[state=collapsed]:hidden">
                 Nodeflow
               </span>

@@ -29,6 +29,7 @@
     "class-variance-authority": "^0.7.1",
     "client-only": "^0.0.1",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "dotenv": "^17.3.1",
     "inngest": "^3.52.4",
     "inngest-cli": "^1.17.1",
@@ -47,6 +48,7 @@
     "react-icons": "^5.5.0",
     "server-only": "^0.0.1",
     "sonner": "^2.0.7",
+    "superjson": "^2.2.6",
     "tailwind-merge": "^3.5.0",
     "zod": "^4.3.6"
   },
