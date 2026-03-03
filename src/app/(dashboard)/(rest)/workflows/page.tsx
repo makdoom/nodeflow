@@ -1,5 +1,7 @@
 import {
-  WorkflowContainer,
+  WorkflowsContainer,
+  WorkflowsLoading,
+  WorkflowsError,
   WorkflowsList,
 } from "@/features/workflows/components/workflows";
 import { workflowParamsLoader } from "@/features/workflows/server/params-loader";
@@ -21,15 +23,15 @@ const Page = async ({ searchParams }: Props) => {
   prefetchWorflows(params);
 
   return (
-    <WorkflowContainer>
+    <WorkflowsContainer>
       <HydrateClient>
-        <ErrorBoundary fallback={<p> Error </p>}>
-          <Suspense fallback={<p>Loading...</p>}>
+        <ErrorBoundary fallback={<WorkflowsError />}>
+          <Suspense fallback={<WorkflowsLoading />}>
             <WorkflowsList />
           </Suspense>
         </ErrorBoundary>
       </HydrateClient>
-    </WorkflowContainer>
+    </WorkflowsContainer>
   );
 };
 export default Page;
