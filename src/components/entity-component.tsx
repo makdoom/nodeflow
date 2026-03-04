@@ -5,7 +5,7 @@ import { ReactNode } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import {
   AlertTriangleIcon,
-  Loader2Icon,
+  LoaderIcon,
   MoreVerticalIcon,
   SearchIcon,
   TrashIcon,
@@ -187,7 +187,7 @@ type LoadingViewProps = StateViewProps & {
 export const LoadingView = ({ message }: LoadingViewProps) => {
   return (
     <div className="flex items-center justify-center flex-col h-full gap-y-4">
-      <Loader2Icon className="size-6 animate-spin text-muted-foreground" />
+      <LoaderIcon className="size-6 animate-spin text-muted-foreground" />
       {!!message && <p className="text-sm text-muted-foreground">{message}</p>}
     </div>
   );
