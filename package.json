@@ -35,6 +35,7 @@
     "dotenv": "^17.3.1",
     "inngest": "^3.52.4",
     "inngest-cli": "^1.17.1",
+    "jotai": "^2.18.0",
     "lucide-react": "^0.575.0",
     "mprocs": "^0.8.3",
     "next": "16.1.6",
