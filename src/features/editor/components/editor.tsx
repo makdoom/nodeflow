@@ -22,6 +22,8 @@ import { useTheme } from "next-themes";
 import "@xyflow/react/dist/style.css";
 import { nodeComponents } from "@/config/node-components";
 import { AddNodeButton } from "./add-node-button";
+import { useSetAtom } from "jotai";
+import { editorAtom } from "../stores/atom";
 
 export const EditorLoading = () => <LoadingView message="Loading editor ..." />;
 export const EditorError = () => (
@@ -34,6 +36,7 @@ export const Editor = ({ workflowId }: { workflowId: string }) => {
   const [nodes, setNodes] = useState<Node[]>(workflow.nodes);
   const [edges, setEdges] = useState<Edge[]>(workflow.edges);
   const [mounted, setMounted] = useState(false);
+  const setEditor = useSetAtom(editorAtom);
 
   useEffect(() => {
     setMounted(true);
@@ -65,9 +68,15 @@ export const Editor = ({ workflowId }: { workflowId: string }) => {
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
       nodeTypes={nodeComponents}
+      onInit={setEditor}
       fitView
       colorMode={resolvedTheme === "dark" ? "dark" : "light"}
       proOptions={{ hideAttribution: true }}
+      snapGrid={[10, 10]}
+      snapToGrid
+      panOnScroll
+      panOnDrag={false}
+      selectionOnDrag
     >
       <Background />
       <Controls />

@@ -60,7 +60,7 @@ const AppSidebar = () => {
               prefetch
               className="font-bold text-xl text-sidebar-primary hover:text-sidebar-primary"
             >
-              <span className="group-data-[state=collapsed]:hidden">
+              <span className="group-data-[state=collapsed]:hidden font-mono">
                 Nodeflow
               </span>
               <span className="hidden group-data-[state=collapsed]:inline">

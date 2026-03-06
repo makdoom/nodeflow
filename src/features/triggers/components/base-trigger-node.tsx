@@ -8,11 +8,11 @@ import { BaseNode, BaseNodeContent } from "@/components/react-flow/base-node";
 import { BaseHandle } from "@/components/react-flow/base-handle";
 import { IconType } from "react-icons";
 import {
-  NodeStatusIndicator,
   type NodeStatus,
+  NodeStatusIndicator,
 } from "@/components/react-flow/node-status-indicator";
 
-type BaseExecutionNodeProp = NodeProps & {
+type BaseTriggerNodeProp = NodeProps & {
   icon: IconType | string;
   name: string;
   description?: string;
@@ -22,17 +22,17 @@ type BaseExecutionNodeProp = NodeProps & {
   onDoubleClick?: () => void;
 };
 
-export const BaseExecutionNode = memo(
+export const BaseTriggerNode = memo(
   ({
     id,
     icon: Icon,
     name,
     description,
-    status = "error",
     children,
+    status = "initial",
     onSetting,
     onDoubleClick,
-  }: BaseExecutionNodeProp) => {
+  }: BaseTriggerNodeProp) => {
     const { setNodes, setEdges } = useReactFlow();
 
     const handleDelete = () => {
@@ -49,8 +49,16 @@ export const BaseExecutionNode = memo(
         onDelete={handleDelete}
         onSetting={onSetting}
       >
-        <NodeStatusIndicator status={status} variant="border">
-          <BaseNode onDoubleClick={onDoubleClick} status={status}>
+        <NodeStatusIndicator
+          status={status}
+          variant="border"
+          className="rounded-l-2xl"
+        >
+          <BaseNode
+            onDoubleClick={onDoubleClick}
+            status={status}
+            className="rounded-l-2xl relative group"
+          >
             <BaseNodeContent>
               {typeof Icon === "string" ? (
                 <Image src={Icon} alt={name} width={16} height={16} />
@@ -58,11 +66,6 @@ export const BaseExecutionNode = memo(
                 <Icon className="size-4 text-muted-foreground" />
               )}
               {children}
-              <BaseHandle
-                id="target-1"
-                type="target"
-                position={Position.Left}
-              />
               <BaseHandle
                 id="source-1"
                 type="source"
@@ -76,4 +79,4 @@ export const BaseExecutionNode = memo(
   },
 );
 
-BaseExecutionNode.displayName = "BaseExecutionNode";
+BaseTriggerNode.displayName = "BaseTriggerNode";
