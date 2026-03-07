@@ -36,39 +36,35 @@ const formSchema = z.object({
   body: z.string().optional(),
 });
 
-export type formSchemaType = z.infer<typeof formSchema>;
+export type HttpRequestFormValues = z.infer<typeof formSchema>;
 
 type PropsType = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (values: formSchemaType) => void;
-  defaultEndPoint?: string;
-  defaultMethod?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
-  defaultBody?: string;
+  onSubmit: (values: HttpRequestFormValues) => void;
+  defaultValues?: Partial<HttpRequestFormValues>;
 };
 
 export const HttpRequestDialog = ({
   open,
   onOpenChange,
   onSubmit,
-  defaultEndPoint,
-  defaultMethod,
-  defaultBody,
+  defaultValues = {},
 }: PropsType) => {
-  const form = useForm<formSchemaType>({
+  const form = useForm<HttpRequestFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      endpoint: defaultEndPoint ?? "",
-      method: defaultMethod ?? "GET",
-      body: defaultBody ?? "",
+      endpoint: defaultValues.endpoint ?? "",
+      method: defaultValues.method ?? "GET",
+      body: defaultValues.body ?? "",
     },
   });
 
   // const watchMode = form.watch("method");
-  const watchMode = form.watch("method", defaultMethod ?? "GET");
+  const watchMode = form.watch("method", defaultValues.method ?? "GET");
   const showBodyField = ["POST", "PUT", "PATCH"].includes(watchMode);
 
-  const handleSubmit = (values: formSchemaType) => {
+  const handleSubmit = (values: HttpRequestFormValues) => {
     onSubmit(values);
     onOpenChange(false);
   };
@@ -76,12 +72,12 @@ export const HttpRequestDialog = ({
   useEffect(() => {
     if (open) {
       form.reset({
-        endpoint: defaultEndPoint ?? "",
-        method: defaultMethod,
-        body: defaultBody ?? "",
+        endpoint: defaultValues.endpoint ?? "",
+        method: defaultValues.method ?? "GET",
+        body: defaultValues.body ?? "",
       });
     }
-  }, [open, form, defaultEndPoint, defaultMethod, defaultBody]);
+  }, [open, form, defaultValues]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
