@@ -3,6 +3,7 @@ import { NonRetriableError } from "inngest";
 import ky, { type Options as KyOptions } from "ky";
 
 type HttpRequestData = {
+  variableName?: string;
   endpoint?: string;
   method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   body?: string;
@@ -21,6 +22,13 @@ export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({
     );
   }
 
+  if (!data.variableName) {
+    // TODO: publish error state
+    throw new NonRetriableError(
+      "HTTP Request node is not configured with a variable name",
+    );
+  }
+
   // TODO: publish loading state
   const result = await step.run("http-request", async () => {
     const endpoint = data.endpoint!;
@@ -29,7 +37,10 @@ export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({
     const options: KyOptions = { method };
 
     if (["POST", "PUT", "PATCH"].includes(method)) {
-      if (data.body) options.body = data.body;
+      if (data.body) {
+        options.body = data.body;
+        options.headers = { "Content-Type": "application/json" };
+      }
     }
 
     const response = await ky(endpoint, options);
@@ -38,13 +49,24 @@ export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({
       ? await response.json()
       : await response.text();
 
-    return {
-      ...context,
+    const responsePayload = {
       httpResponse: {
         status: response.status,
         responseText: response.statusText,
         data: responseData,
       },
+    };
+
+    if (data.variableName) {
+      return {
+        ...context,
+        [data.variableName]: responsePayload,
+      };
+    }
+
+    return {
+      ...context,
+      httpResponse: responsePayload,
     };
   });
 
