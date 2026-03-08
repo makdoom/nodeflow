@@ -1,3 +1,4 @@
+// "use client";
 import { ModeToggle } from "./dark-mode-toggle";
 import { SidebarTrigger } from "./ui/sidebar";
 
