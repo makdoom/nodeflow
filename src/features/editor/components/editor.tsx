@@ -2,7 +2,7 @@
 
 import { ErrorView, LoadingView } from "@/components/entity-component";
 import { useSuspenseWorkflow } from "@/features/workflows/hooks/use-workflows";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import {
   ReactFlow,
   applyNodeChanges,
@@ -24,6 +24,8 @@ import { nodeComponents } from "@/config/node-components";
 import { AddNodeButton } from "./add-node-button";
 import { useSetAtom } from "jotai";
 import { editorAtom } from "../stores/atom";
+import { NodeType } from "@/generated/prisma/enums";
+import { ExecuteWorkflowButton } from "./execute-workflow-button";
 
 export const EditorLoading = () => <LoadingView message="Loading editor ..." />;
 export const EditorError = () => (
@@ -58,6 +60,10 @@ export const Editor = ({ workflowId }: { workflowId: string }) => {
     [],
   );
 
+  const hasManualTrigger = useMemo(() => {
+    return nodes.some((node) => node.type === NodeType.MANUAL_TRIGGER);
+  }, []);
+
   if (!mounted) return null;
 
   return (
@@ -84,6 +90,11 @@ export const Editor = ({ workflowId }: { workflowId: string }) => {
       <Panel position="top-right">
         <AddNodeButton />
       </Panel>
+      {hasManualTrigger && (
+        <Panel position="bottom-center">
+          <ExecuteWorkflowButton workflowId={workflowId} />
+        </Panel>
+      )}
     </ReactFlow>
   );
 };

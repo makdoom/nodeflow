@@ -1,54 +1,40 @@
+import { NonRetriableError } from "inngest";
 import { inngest } from "./client";
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { createOpenAI } from "@ai-sdk/openai";
-import { createAnthropic } from "@ai-sdk/anthropic";
-import { generateText } from "ai";
+import prisma from "@/lib/db";
+import { topologiacalSort } from "./utils";
+import { NodeType } from "@/generated/prisma/enums";
+import { getExecutor } from "./lib/executor-registry";
 
-const goolge = createGoogleGenerativeAI();
-const openAi = createOpenAI();
-const anthropic = createAnthropic();
-
-export const execute = inngest.createFunction(
-  { id: "execute" },
-  { event: "execute/ai" },
+export const executeWorkflow = inngest.createFunction(
+  { id: "execute-workflow" },
+  { event: "workflow/execute.workflow" },
   async ({ event, step }) => {
-    const { steps: geminSteps } = await step.ai.wrap(
-      "gemini-generate-text",
-      generateText,
-      {
-        model: goolge("gemini-3-flash-preview"),
-        system:
-          "You are a helpful assistant that helps users with their questions.",
-        prompt: "what is the capital of France?",
-      },
-    );
+    console.log(event);
 
-    const { steps: openAiSteps } = await step.ai.wrap(
-      "openai-generate-text",
-      generateText,
-      {
-        model: openAi("gpt-5"),
-        system:
-          "You are a helpful assistant that helps users with their questions.",
-        prompt: "what is the capital of France?",
-      },
-    );
+    const { workflowId, userId } = event.data;
+    if (!workflowId) throw new NonRetriableError("No workflow ID provided");
 
-    const { steps: anthropicSteps } = await step.ai.wrap(
-      "anthropic-generate-text",
-      generateText,
-      {
-        model: anthropic("claude-3-5-sonnet-preview"),
-        system:
-          "You are a helpful assistant that helps users with their questions.",
-        prompt: "what is the capital of France?",
-      },
-    );
+    const sortedNodes = await step.run("Prepare-workflow", async () => {
+      const workflow = await prisma.workflow.findFirstOrThrow({
+        where: { id: workflowId, userId },
+        include: { nodes: true, connections: true },
+      });
 
-    return {
-      geminSteps,
-      openAiSteps,
-      anthropicSteps,
-    };
+      return topologiacalSort(workflow.nodes, workflow.connections);
+    });
+
+    // Initialize the context with any initial data from the trigger (eg: event, webhook etc)
+    let context = event.data?.initalData || {};
+    for (let node of sortedNodes) {
+      const executor = getExecutor(node.type as NodeType);
+      context = await executor({
+        data: node.data as Record<string, unknown>,
+        nodeId: node.id,
+        context,
+        step,
+      });
+    }
+
+    return { workflowId, result: context };
   },
 );
