@@ -9,8 +9,6 @@ export const executeWorkflow = inngest.createFunction(
   { id: "execute-workflow" },
   { event: "workflow/execute.workflow" },
   async ({ event, step }) => {
-    console.log(event);
-
     const { workflowId, userId } = event.data;
     if (!workflowId) throw new NonRetriableError("No workflow ID provided");
 
