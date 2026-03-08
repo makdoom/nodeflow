@@ -31,6 +31,13 @@ import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 
 const formSchema = z.object({
+  variableName: z
+    .string()
+    .min(1, "Variable name is required")
+    .regex(/^[A-Za-z_][A-Za-z0-9_]*$/, {
+      message:
+        "Variable name must start with a letter or underscores and contain only letters, numbers and underscores",
+    }),
   endpoint: z.url({ message: "Please enter a valid endpoint" }),
   method: z.enum(["GET", "POST", "PUT", "DELETE", "PATCH"]),
   body: z.string().optional(),
@@ -54,13 +61,14 @@ export const HttpRequestDialog = ({
   const form = useForm<HttpRequestFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      variableName: defaultValues.variableName ?? "",
       endpoint: defaultValues.endpoint ?? "",
       method: defaultValues.method ?? "GET",
       body: defaultValues.body ?? "",
     },
   });
 
-  // const watchMode = form.watch("method");
+  const variableName = form.watch("variableName") || "myApiCall";
   const watchMode = form.watch("method", defaultValues.method ?? "GET");
   const showBodyField = ["POST", "PUT", "PATCH"].includes(watchMode);
 
@@ -72,6 +80,7 @@ export const HttpRequestDialog = ({
   useEffect(() => {
     if (open) {
       form.reset({
+        variableName: defaultValues.variableName ?? "",
         endpoint: defaultValues.endpoint ?? "",
         method: defaultValues.method ?? "GET",
         body: defaultValues.body ?? "",
@@ -91,6 +100,30 @@ export const HttpRequestDialog = ({
 
         <form className="mt-4" onSubmit={form.handleSubmit(handleSubmit)}>
           <FieldGroup>
+            <Controller
+              name="variableName"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} className="gap-1">
+                  <FieldLabel htmlFor="variableName">Variable Name</FieldLabel>
+                  <Input
+                    {...field}
+                    id="variableName"
+                    aria-invalid={fieldState.invalid}
+                    placeholder="eg: myApiCall"
+                    autoComplete="off"
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                  <FieldDescription>
+                    Use this name to reference the result in other nodes:{" "}
+                    {`{{${variableName}.httpResponse.data}}`}
+                  </FieldDescription>
+                </Field>
+              )}
+            />
+
             <Controller
               name="method"
               control={form.control}
