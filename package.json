@@ -36,6 +36,7 @@
     "inngest": "^3.52.4",
     "inngest-cli": "^1.17.1",
     "jotai": "^2.18.0",
+    "ky": "^1.14.3",
     "lucide-react": "^0.575.0",
     "mprocs": "^0.8.3",
     "next": "16.1.6",
@@ -53,6 +54,7 @@
     "sonner": "^2.0.7",
     "superjson": "^2.2.6",
     "tailwind-merge": "^3.5.0",
+    "toposort": "^2.0.2",
     "zod": "^4.3.6"
   },
   "devDependencies": {
@@ -62,6 +64,7 @@
     "@types/pg": "^8.18.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/toposort": "^2.0.7",
     "babel-plugin-react-compiler": "1.0.0",
     "prisma": "^7.4.2",
     "shadcn": "^3.8.5",
