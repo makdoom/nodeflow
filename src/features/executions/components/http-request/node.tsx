@@ -5,6 +5,9 @@ import { memo, useState } from "react";
 import { BaseExecutionNode } from "../base-execution-node";
 import { IoGlobeOutline } from "react-icons/io5";
 import { HttpRequestFormValues, HttpRequestDialog } from "./dialog";
+import { useNodeStatus } from "@/hooks/use-node-status";
+import { HTTP_REQUEST_CHANNEL_NAME } from "@/inngest/channels/http-request";
+import { fetchHttpRequestRealtimeToken } from "./actions";
 
 type HttpRequestNodeData = {
   variableName?: string;
@@ -19,7 +22,12 @@ export const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeType>) => {
   const { setNodes } = useReactFlow();
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const status = "initial";
+  const status = useNodeStatus({
+    nodeId: props.id,
+    channel: HTTP_REQUEST_CHANNEL_NAME,
+    topic: "status",
+    refreshToken: fetchHttpRequestRealtimeToken,
+  });
 
   const nodeData = props.data;
   const description = nodeData.endpoint

@@ -22,7 +22,7 @@ export function BaseNode({ className, status, ...props }: BaseNodeProps) {
     >
       {props.children}
       {status == "loading" && (
-        <LoaderIcon className="absolute -right-0.5 -bottom-0.5 size-2.5 text-sidebar-primary animate-spin" />
+        <LoaderIcon className="absolute right-0 bottom-0 size-2 text-sidebar-primary animate-spin" />
       )}
       {status == "error" && (
         <MdOutlineCancel className="absolute right-0.5 bottom-0.5 size-2.5 text-destructive" />
