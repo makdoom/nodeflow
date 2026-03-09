@@ -28,6 +28,12 @@ const triggerNodes: NodeTypeOption[] = [
     description: "Runs the flow by clicking manually",
     icon: LuMousePointer2,
   },
+  {
+    type: NodeType.GOOGLE_FORM_TRIGGER,
+    label: "Google Form Trigger",
+    description: "Runs the flow when a Google Form is submitted",
+    icon: "/logos/google-form.svg",
+  },
 ];
 
 const executionNodes: NodeTypeOption[] = [
@@ -101,7 +107,7 @@ export const NodeSelector = ({
         <SheetTrigger asChild>{children}</SheetTrigger>
         <SheetContent
           side="right"
-          className="w-full sm:max-w-sm overflow-y-auto space-y-3"
+          className="w-full sm:max-w-sm overflow-y-auto"
         >
           <SheetHeader>
             <SheetTitle>What trigger this wokflow</SheetTitle>
@@ -109,7 +115,8 @@ export const NodeSelector = ({
               A trigger is a step that starts your wofflow
             </SheetDescription>
           </SheetHeader>
-          <div>
+
+          <div className="space-y-4">
             {triggerNodes.map((nodeType) => {
               const Icon = nodeType.icon;
 
