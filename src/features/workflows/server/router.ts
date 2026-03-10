@@ -98,6 +98,16 @@ export const workflowsRouter = createTRPCRouter({
           where: { workflowId: id },
         });
 
+        console.log(
+          nodes.map((node) => ({
+            id: node.id,
+            workflowId: id,
+            name: node.type || "Unknown",
+            type: node.type as NodeType,
+            position: node.position,
+            data: node.data || {},
+          })),
+        );
         // Create nodes
         await tx.node.createMany({
           data: nodes.map((node) => ({
@@ -109,6 +119,8 @@ export const workflowsRouter = createTRPCRouter({
             data: node.data || {},
           })),
         });
+
+        console.log("hereeeeee");
 
         // Create connections
         await tx.connection.createMany({
