@@ -16,6 +16,7 @@ export const ManualTriggerNode = memo((props: NodeProps) => {
     topic: "status",
     refreshToken: fetchManualTriggerRealtimeToken,
   });
+
   const handleOpenSetting = () => setDialogOpen(true);
 
   return (

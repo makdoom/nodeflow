@@ -6,12 +6,17 @@ import { NodeType } from "@/generated/prisma/enums";
 import { getExecutor } from "./lib/executor-registry";
 import { httpRequestChannel } from "./channels/http-request";
 import { manualTriggerChannel } from "./channels/manual-trigger";
+import { googleFormTriggerChannel } from "./channels/google-form-trigger";
 
 export const executeWorkflow = inngest.createFunction(
   { id: "execute-workflow" },
   {
     event: "workflow/execute.workflow",
-    channels: [httpRequestChannel(), manualTriggerChannel()],
+    channels: [
+      httpRequestChannel(),
+      manualTriggerChannel(),
+      googleFormTriggerChannel(),
+    ],
   },
   async ({ event, step, publish }) => {
     const { workflowId, userId } = event.data;
@@ -27,7 +32,7 @@ export const executeWorkflow = inngest.createFunction(
     });
 
     // Initialize the context with any initial data from the trigger (eg: event, webhook etc)
-    let context = event.data?.initalData || {};
+    let context = event.data?.initialData || {};
     for (let node of sortedNodes) {
       const executor = getExecutor(node.type as NodeType);
       context = await executor({

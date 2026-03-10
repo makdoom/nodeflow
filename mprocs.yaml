@@ -1,6 +1,9 @@
 procs:
+  next:
+    cmd: ["pnpm", "run", "dev"]
+
   inngest:
     cmd: ["pnpm", "run", "inngest:dev"]
 
-  next:
-    cmd: ["pnpm", "run", "dev"]
+  ngrok:
+    cmd: ["pnpm", "run", "ngrok:dev"]
