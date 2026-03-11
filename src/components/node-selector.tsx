@@ -13,6 +13,7 @@ import {
 import { useReactFlow } from "@xyflow/react";
 import { toast } from "sonner";
 import { createId } from "@paralleldrive/cuid2";
+import { useTheme } from "next-themes";
 
 export type NodeTypeOption = {
   type: NodeType;
@@ -49,6 +50,24 @@ const executionNodes: NodeTypeOption[] = [
     description: "Makes an HTTP request",
     icon: IoGlobeOutline,
   },
+  {
+    type: NodeType.GEMINI,
+    label: "Gemini",
+    description: "Use Google Gemini to generate text",
+    icon: "/logos/gemini-icon.svg",
+  },
+  {
+    type: NodeType.OPENAI,
+    label: "OpenAI",
+    description: "Use OpenAI to generate text",
+    icon: "/logos/openai-dark-icon.svg",
+  },
+  {
+    type: NodeType.ANTHROPIC,
+    label: "Anthropic",
+    description: "Use Anthropic to generate text",
+    icon: "/logos/anthropic-icon.svg",
+  },
 ];
 
 type NodeSelectorProps = {
@@ -62,6 +81,7 @@ export const NodeSelector = ({
   onOpenChange,
   children,
 }: NodeSelectorProps) => {
+  const { resolvedTheme } = useTheme();
   const { setNodes, getNodes, screenToFlowPosition } = useReactFlow();
 
   const handleNodeSelect = useCallback(
@@ -122,7 +142,7 @@ export const NodeSelector = ({
             </SheetDescription>
           </SheetHeader>
 
-          <div className="space-y-4">
+          <div className="space-y-6">
             {triggerNodes.map((nodeType) => {
               const Icon = nodeType.icon;
 
@@ -157,9 +177,12 @@ export const NodeSelector = ({
             })}
           </div>
 
-          <div>
+          <div className="space-y-6">
             {executionNodes.map((nodeType) => {
-              const Icon = nodeType.icon;
+              let Icon = nodeType.icon;
+
+              if (nodeType.type == "OPENAI" && resolvedTheme == "dark")
+                Icon = "/logos/openai-white-icon.svg";
 
               return (
                 <div
