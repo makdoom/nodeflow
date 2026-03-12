@@ -120,8 +120,6 @@ export const workflowsRouter = createTRPCRouter({
           })),
         });
 
-        console.log("hereeeeee");
-
         // Create connections
         await tx.connection.createMany({
           data: edges.map((edge) => ({
