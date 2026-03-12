@@ -140,7 +140,7 @@ export const WorkflowsEmpty = () => {
       {modal}
       <EmptyView
         title="Create your first workflow"
-        message="You have not created any worflows yet. Get started by creating your first workflow"
+        message="You have not created any workflowss yet. Get started by creating your first workflow"
         buttonLabel="New Workflow"
         onNew={createNewWorkflow}
         disabled={createWorkflow.isPending}

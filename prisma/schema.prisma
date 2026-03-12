@@ -8,16 +8,17 @@ datasource db {
 }
 
 model User {
-  id            String     @id
+  id            String       @id
   name          String
   email         String
-  emailVerified Boolean    @default(false)
+  emailVerified Boolean      @default(false)
   image         String?
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
   sessions      Session[]
   accounts      Account[]
   workflows     Workflow[]
+  credentials   Credential[]
 
   @@unique([email])
   @@map("user")
@@ -105,13 +106,15 @@ model Node {
   position Json
   data     Json     @default("{}")
 
-  workflowId String
-  workflow   Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  createdAt         DateTime     @default(now())
-  updatedAt         DateTime     @updatedAt
+  workflowId        String
+  workflow          Workflow     @relation(fields: [workflowId], references: [id], onDelete: Cascade)
   outputConnections Connection[] @relation("FromNode")
   inputConnections  Connection[] @relation("ToNode")
+  credential        Credential?  @relation(fields: [credentialId], references: [id])
+  credentialId      String?
 
   @@map("node")
 }
@@ -136,4 +139,27 @@ model Connection {
 
   @@unique([fromNodeId, toNodeId, fromOutput, toInput])
   @@map("connection")
+}
+
+enum CredentialType {
+  GEMINI
+  OPENAI
+  ANTHROPIC
+}
+
+model Credential {
+  id    String         @id @default(cuid())
+  name  String
+  value String
+  type  CredentialType
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  node Node[]
+
+  @@map("credential")
 }
