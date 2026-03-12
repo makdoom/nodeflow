@@ -23,16 +23,25 @@ export const executeWorkflow = inngest.createFunction(
     ],
   },
   async ({ event, step, publish }) => {
-    const { workflowId, userId } = event.data;
+    const { workflowId } = event.data;
     if (!workflowId) throw new NonRetriableError("No workflow ID provided");
 
-    const sortedNodes = await step.run("Prepare-workflow", async () => {
+    const sortedNodes = await step.run("prepare-workflow", async () => {
       const workflow = await prisma.workflow.findFirstOrThrow({
-        where: { id: workflowId, userId },
+        where: { id: workflowId },
         include: { nodes: true, connections: true },
       });
 
       return topologiacalSort(workflow.nodes, workflow.connections);
+    });
+
+    const userId = await step.run("find-user-id", async () => {
+      const workflow = await prisma.workflow.findUniqueOrThrow({
+        where: { id: workflowId },
+        select: { userId: true },
+      });
+
+      return workflow.userId;
     });
 
     // Initialize the context with any initial data from the trigger (eg: event, webhook etc)
@@ -42,6 +51,7 @@ export const executeWorkflow = inngest.createFunction(
       context = await executor({
         data: node.data as Record<string, unknown>,
         nodeId: node.id,
+        userId,
         context,
         step,
         publish,
