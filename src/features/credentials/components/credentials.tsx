@@ -13,14 +13,14 @@ import {
 import type { ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { useEntitySearch } from "../hooks/use-entity-search";
-import type { Credential } from "@/generated/prisma/client";
-import { GoWorkflow } from "react-icons/go";
+import { type Credential } from "@/generated/prisma/client";
 import { formatDistanceToNow } from "date-fns";
 import { useCredentialsParams } from "../hooks/use-credential-params";
 import {
   useRemoveCredential,
   useSuspenseCredentials,
 } from "../hooks/use-credentials";
+import Image from "next/image";
 
 const CredentialsSearch = () => {
   const [params, setParams] = useCredentialsParams();
@@ -118,11 +118,19 @@ export const CredentialsEmpty = () => {
   );
 };
 
+const credentialsLogos = {
+  GEMINI: "/logos/gemini-icon.svg",
+  OPENAI: "/logos/openai-white-icon.svg",
+  ANTHROPIC: "/logos/anthropic-icon.svg",
+} as const;
+
 export const CredentialItem = ({ credential }: { credential: Credential }) => {
   const removeCredential = useRemoveCredential();
 
   const handleRemoveCredential = () =>
     removeCredential.mutate({ id: credential.id });
+
+  const logo = credentialsLogos[credential.type];
 
   return (
     <EntitItem
@@ -143,7 +151,7 @@ export const CredentialItem = ({ credential }: { credential: Credential }) => {
       }
       image={
         <div className="size-8 flex items-center justify-center">
-          <GoWorkflow className="size-5! text-muted-foreground" />
+          <Image src={logo} alt={credential.name} height={20} width={20} />
         </div>
       }
       onRemove={handleRemoveCredential}

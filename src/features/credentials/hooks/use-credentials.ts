@@ -18,7 +18,7 @@ export const useSuspenseCredentials = () => {
 };
 
 // Hook to create new credentail
-export const useSuspenseCreateCredential = () => {
+export const useCreateCredential = () => {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 

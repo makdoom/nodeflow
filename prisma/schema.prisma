@@ -157,7 +157,9 @@ model Credential {
   updatedAt DateTime @updatedAt
 
   userId String
-  user   User   @relation(fields: [id], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   node Node[]
+
+  @@map("credential")
 }
