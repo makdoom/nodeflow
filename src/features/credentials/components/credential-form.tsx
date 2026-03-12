@@ -75,7 +75,7 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-const CredentialForm = ({ initialData }: CredentialFormProps) => {
+export const CredentialForm = ({ initialData }: CredentialFormProps) => {
   const router = useRouter();
   const createCredential = useCreateCredential();
   const updateCredential = useUpdateCredential();
@@ -107,8 +107,8 @@ const CredentialForm = ({ initialData }: CredentialFormProps) => {
       );
     } else {
       await createCredential.mutateAsync(values, {
-        onSuccess: (data) => {
-          router.push(`/credentials/${data.name}`);
+        onSuccess: () => {
+          router.push(`/credentials`);
         },
         onError: (error) => {
           handleError(error);
@@ -246,8 +246,6 @@ const CredentialForm = ({ initialData }: CredentialFormProps) => {
     </>
   );
 };
-
-export default CredentialForm;
 
 export const CredentialView = ({ credentialId }: { credentialId: string }) => {
   const { data: credential } = useSuspenseCredential(credentialId);
