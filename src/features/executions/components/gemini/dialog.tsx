@@ -64,7 +64,6 @@ export const GeminiDialog = ({
   const { data: credentials, isLoading: isLoadingCredential } =
     useCredentialByType(CredentialType.GEMINI);
 
-  console.log({ credentials });
   const form = useForm<GeminiFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {

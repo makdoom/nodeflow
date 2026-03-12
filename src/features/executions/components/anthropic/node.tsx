@@ -6,11 +6,11 @@ import { BaseExecutionNode } from "../base-execution-node";
 import { AnthropicFormValues, AnthropicDialog } from "./dialog";
 import { useNodeStatus } from "@/hooks/use-node-status";
 import { fetchAnthropicRealtimeToken } from "./actions";
-import { GEMINI_CHANNEL_NAME } from "@/inngest/channels/gemini";
 import { ANTHROPIC_CHANNEL_NAME } from "@/inngest/channels/anthropic";
 
 type AnthropicNodeData = {
   variableName?: string;
+  credentialId?: string;
   systemPrompt?: string;
   userPrompt?: string;
 };

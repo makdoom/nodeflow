@@ -5,10 +5,12 @@ import { createOpenAI } from "@ai-sdk/openai";
 import Handlebars from "handlebars";
 import { generateText } from "ai";
 import { openaiChannel } from "@/inngest/channels/openai";
+import prisma from "@/lib/db";
 
 type OpenaiData = {
   variableName?: string;
   systemPrompt?: string;
+  credentialId?: string;
   userPrompt?: string;
 };
 
@@ -35,6 +37,13 @@ export const openaiExecutor: NodeExecutor<OpenaiData> = async ({
     );
   }
 
+  if (!data.credentialId) {
+    await publish(openaiChannel().status({ nodeId, status: "error" }));
+    throw new NonRetriableError(
+      "Anthropic node is not configured with a credential",
+    );
+  }
+
   if (!data.userPrompt) {
     await publish(openaiChannel().status({ nodeId, status: "error" }));
     throw new NonRetriableError(
@@ -50,10 +59,18 @@ export const openaiExecutor: NodeExecutor<OpenaiData> = async ({
 
   const userPrompt = Handlebars.compile(data.userPrompt)(context);
 
-  // TODO: Fetch credentials
-  const credentialValue = process.env.OPENAI_API_KEY!;
+  const credential = await step.run("get-credential", () => {
+    return prisma.credential.findUnique({
+      where: { id: data.credentialId },
+    });
+  });
 
-  const openAi = createOpenAI({ apiKey: credentialValue });
+  if (!credential) {
+    await publish(openaiChannel().status({ nodeId, status: "error" }));
+    throw new NonRetriableError("Anthropic node credential not found");
+  }
+
+  const openAi = createOpenAI({ apiKey: credential.value });
 
   try {
     const { steps } = await step.ai.wrap("openai-generate-text", generateText, {
