@@ -33,7 +33,7 @@ type EntityHeaderProps = {
   title: string;
   description?: string;
   search?: ReactNode;
-  newButtonLabel: string;
+  newButtonLabel?: string;
   disabled?: boolean;
   isCreating?: boolean;
 } & (
