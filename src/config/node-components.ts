@@ -9,6 +9,7 @@ import { StripeTriggerNode } from "@/features/triggers/components/stripe-trigger
 import { GeminiNode } from "@/features/executions/components/gemini/node";
 import { OpenaiNode } from "@/features/executions/components/openai/node";
 import { AnthropicNode } from "@/features/executions/components/anthropic/node";
+import { DiscordNode } from "@/features/executions/components/discord/node";
 
 export const nodeComponents = {
   [NodeType.INITIAL]: InitialNode,
@@ -19,6 +20,7 @@ export const nodeComponents = {
   [NodeType.GEMINI]: GeminiNode,
   [NodeType.OPENAI]: OpenaiNode,
   [NodeType.ANTHROPIC]: AnthropicNode,
+  [NodeType.DISCORD]: DiscordNode,
 } as const satisfies NodeTypes;
 
 export type RegisteredNodeType = keyof typeof nodeComponents;
