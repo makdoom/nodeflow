@@ -6,6 +6,7 @@ import Handlebars from "handlebars";
 import { generateText } from "ai";
 import { openaiChannel } from "@/inngest/channels/openai";
 import prisma from "@/lib/db";
+import { decrypt } from "@/lib/encryption";
 
 type OpenaiData = {
   variableName?: string;
@@ -71,7 +72,7 @@ export const openaiExecutor: NodeExecutor<OpenaiData> = async ({
     throw new NonRetriableError("Anthropic node credential not found");
   }
 
-  const openAi = createOpenAI({ apiKey: credential.value });
+  const openAi = createOpenAI({ apiKey: decrypt(credential.value) });
 
   try {
     const { steps } = await step.ai.wrap("openai-generate-text", generateText, {

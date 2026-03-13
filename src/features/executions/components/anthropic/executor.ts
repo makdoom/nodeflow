@@ -5,6 +5,7 @@ import Handlebars from "handlebars";
 import { generateText } from "ai";
 import { anthropicChannel } from "@/inngest/channels/anthropic";
 import prisma from "@/lib/db";
+import { decrypt } from "@/lib/encryption";
 
 type AnthropicData = {
   variableName?: string;
@@ -67,7 +68,7 @@ export const anthropicExecutor: NodeExecutor<AnthropicData> = async ({
     await publish(anthropicChannel().status({ nodeId, status: "error" }));
     throw new NonRetriableError("Anthropic node credential not found");
   }
-  const anthropic = createAnthropic({ apiKey: credential.value });
+  const anthropic = createAnthropic({ apiKey: decrypt(credential.value) });
 
   try {
     const { steps } = await step.ai.wrap(
