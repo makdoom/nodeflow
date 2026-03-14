@@ -1,6 +1,9 @@
 # Nodeflow
 
-An open-source visual workflow automation platform — similar to [n8n](https://n8n.io) — built with Next.js. Design, connect, and execute multi-step workflows through a drag-and-drop node editor powered by React Flow.
+Nodeflow is a modern workflow automation platform that allows developers and teams to connect APIs, services, and databases to automate repetitive tasks and build powerful event-driven workflows.
+
+Inspired by tools like n8n and Zapier, Nodeflow provides a visual workflow builder where users can design automation pipelines, trigger actions based on events, and integrate multiple services without complex coding.
+
 
 ## ✨ Features
 
