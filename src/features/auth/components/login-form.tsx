@@ -193,7 +193,9 @@ export function LoginForm() {
                 </Button>
                 <FieldDescription className="text-center">
                   Don&apos;t have an account?{" "}
-                  <Link href="/register">Register</Link>
+                  <Link href="/register" className="hover:text-sidebar-primary">
+                    Register
+                  </Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>

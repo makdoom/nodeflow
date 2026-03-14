@@ -107,7 +107,7 @@ const AppSidebar = () => {
               <SidebarMenuButton
                 tooltip="Upgrade to Pro"
                 className="gap-x4 h-10 px-4"
-                onClick={() => authClient.checkout({ slug: "Nodeflow-Pro" })}
+                onClick={() => authClient.checkout({ slug: "Nodeflow" })}
               >
                 <IoFlashOutline className="size-4.5!" />
                 <span>Upgrade to Pro</span>

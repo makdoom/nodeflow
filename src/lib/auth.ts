@@ -30,8 +30,8 @@ export const auth = betterAuth({
         checkout({
           products: [
             {
-              productId: "580b1a22-cc8e-43a3-aa0b-86c1d243847c",
-              slug: "Nodeflow-Pro", // Custom slug for easy reference in Checkout URL, e.g. /checkout/Nodeflow-Pro
+              productId: process.env.POLAR_PRODUCT_ID!,
+              slug: "Nodeflow",
             },
           ],
           successUrl: process.env.POLAR_SUCCESS_URL || "http://localhost:3000",

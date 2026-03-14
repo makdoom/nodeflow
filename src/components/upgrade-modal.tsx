@@ -36,7 +36,7 @@ export const UpgradeModal = ({ open, onOpenChange }: UpgradeModalProps) => {
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
-            onClick={() => authClient.checkout({ slug: "Nodeflow-Pro" })}
+            onClick={() => authClient.checkout({ slug: "Nodeflow" })}
           >
             Upgrade to Pro
           </AlertDialogAction>
