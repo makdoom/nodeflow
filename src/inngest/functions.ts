@@ -28,7 +28,7 @@ export const executeWorkflow = inngest.createFunction(
     },
   },
   {
-    event: "workflow/execute.workflow",
+    event: "execute.workflow",
     channels: [
       httpRequestChannel(),
       manualTriggerChannel(),
